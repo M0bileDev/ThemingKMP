@@ -27,11 +27,12 @@ val DarkColorTheme = darkColorScheme(
 @Composable
 fun NoteAppTheme(
     content: @Composable () -> Unit
-){
-    val colorScheme = if(isSystemInDarkTheme()) DarkColorTheme else LightColorTheme
+) {
+    val colorScheme = if (isSystemInDarkTheme()) DarkColorTheme else LightColorTheme
     MaterialTheme(
-        colorScheme = colorScheme
-    ){
+        colorScheme = colorScheme,
+        typography = Typography
+    ) {
         content()
     }
 }
