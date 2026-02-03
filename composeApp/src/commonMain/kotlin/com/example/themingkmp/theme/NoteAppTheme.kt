@@ -1,6 +1,5 @@
 package com.example.themingkmp.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -26,9 +25,11 @@ val DarkColorTheme = darkColorScheme(
 
 @Composable
 fun NoteAppTheme(
+    darkTheme: Boolean,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (isSystemInDarkTheme()) DarkColorTheme else LightColorTheme
+//    isSystemInDarkTheme()
+    val colorScheme = if (darkTheme) DarkColorTheme else LightColorTheme
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography
