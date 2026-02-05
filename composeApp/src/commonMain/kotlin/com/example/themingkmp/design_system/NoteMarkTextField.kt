@@ -2,6 +2,7 @@ package com.example.themingkmp.design_system
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -51,9 +52,12 @@ fun NoteMarkTextField(
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = text,
             onValueChange = onValueChanged,
-            visualTransformation = if (isSecret) PasswordVisualTransformation(mask = SECRET_MASK) else VisualTransformation.None,
+            visualTransformation = if (!isPasswordVisile && isSecret) PasswordVisualTransformation(
+                mask = SECRET_MASK
+            ) else VisualTransformation.None,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = MaterialTheme.colorScheme.surface,
@@ -80,14 +84,14 @@ fun NoteMarkTextField(
                     when {
                         isPasswordVisile -> {
                             Icon(
-                                imageVector = Icons.Default.Visibility,
+                                imageVector = Icons.Default.VisibilityOff,
                                 contentDescription = "Hide password"
                             )
                         }
 
                         isPasswordVisile.not() -> {
                             Icon(
-                                imageVector = Icons.Default.VisibilityOff,
+                                imageVector = Icons.Default.Visibility,
                                 contentDescription = "Show password"
                             )
                         }
