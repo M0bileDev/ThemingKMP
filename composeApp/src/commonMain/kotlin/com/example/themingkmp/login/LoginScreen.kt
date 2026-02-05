@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,6 +37,7 @@ import com.example.themingkmp.design_system.NoteMarkTextField
 import com.example.themingkmp.theme.NoteAppTheme
 import com.example.themingkmp.utils.DeviceConfiguration
 import com.example.themingkmp.utils.DeviceConfiguration.Companion.toDeviceConfiguration
+import com.example.themingkmp.utils.TABLET_DESKTOP_MAX_WIDTH
 
 @Composable
 fun LoginScreen() {
@@ -111,6 +113,27 @@ fun LoginScreen() {
             DeviceConfiguration.TABLET_PORTRAIT,
             DeviceConfiguration.TABLET_LANDSCAPE,
             DeviceConfiguration.DESKTOP -> {
+                Column(
+                    modifier = rootModifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(top = 48.dp),
+                    verticalArrangement = Arrangement.spacedBy(32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    LoginHeaderSection(
+                        alignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.widthIn(TABLET_DESKTOP_MAX_WIDTH.dp)
+                    )
+                    LoginFormSection(
+                        emailText = emailText,
+                        onEmailTextChange = { emailText = it },
+                        passwordText = passwordText,
+                        onPasswordTextChange = { passwordText = it },
+                        onLoginClick = {},
+                        onLinkClick = {},
+                        modifier = Modifier.widthIn(max = TABLET_DESKTOP_MAX_WIDTH.dp)
+                    )
+                }
             }
         }
 
@@ -118,8 +141,14 @@ fun LoginScreen() {
 }
 
 @Composable
-fun LoginHeaderSection(modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
+fun LoginHeaderSection(
+    alignment: Alignment.Horizontal = Alignment.Start,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = alignment
+    ) {
         Text(
             text = "Log In",
             style = MaterialTheme.typography.titleLarge
