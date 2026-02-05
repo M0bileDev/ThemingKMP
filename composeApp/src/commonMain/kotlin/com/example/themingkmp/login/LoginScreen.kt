@@ -3,17 +3,23 @@ package com.example.themingkmp.login
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +34,8 @@ import com.example.themingkmp.design_system.NoteMarkButton
 import com.example.themingkmp.design_system.NoteMarkLink
 import com.example.themingkmp.design_system.NoteMarkTextField
 import com.example.themingkmp.theme.NoteAppTheme
+import com.example.themingkmp.utils.DeviceConfiguration
+import com.example.themingkmp.utils.DeviceConfiguration.Companion.toDeviceConfiguration
 
 @Composable
 fun LoginScreen() {
@@ -39,37 +47,73 @@ fun LoginScreen() {
         modifier = Modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets.statusBars
     ) { innerPadding ->
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(innerPadding)
-                .clip(
-                    RoundedCornerShape(
-                        topStart = 24.dp,
-                        topEnd = 24.dp
+
+        val rootModifier = Modifier.fillMaxSize()
+            .padding(innerPadding)
+            .clip(
+                RoundedCornerShape(
+                    topStart = 24.dp,
+                    topEnd = 24.dp
+                )
+            )
+            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+            .padding(
+                horizontal = 16.dp,
+                vertical = 24.dp
+            )
+            //prevent content from overlapping on the navigation bar
+            .consumeWindowInsets(WindowInsets.navigationBars)
+
+        val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+        val deviceConfiguration = windowSizeClass.toDeviceConfiguration()
+        when (deviceConfiguration) {
+            DeviceConfiguration.MOBILE_PORTRAIT -> {
+                Column(
+                    modifier = rootModifier,
+                    verticalArrangement = Arrangement.spacedBy(32.dp)
+                ) {
+                    LoginHeaderSection(
+                        modifier = Modifier.fillMaxWidth()
                     )
-                )
-                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-                .padding(
-                    horizontal = 16.dp,
-                    vertical = 24.dp
-                )
-                //prevent content from overlapping on the navigation bar
-                .consumeWindowInsets(WindowInsets.navigationBars),
-            verticalArrangement = Arrangement.spacedBy(32.dp)
-        ) {
-            LoginHeaderSection(
-                modifier = Modifier.fillMaxWidth()
-            )
-            LoginFormSection(
-                emailText = emailText,
-                onEmailTextChange = { emailText = it },
-                passwordText = passwordText,
-                onPasswordTextChange = { passwordText = it },
-                onLoginClick = {},
-                onLinkClick = {},
-                modifier = Modifier.fillMaxWidth()
-            )
+                    LoginFormSection(
+                        emailText = emailText,
+                        onEmailTextChange = { emailText = it },
+                        passwordText = passwordText,
+                        onPasswordTextChange = { passwordText = it },
+                        onLoginClick = {},
+                        onLinkClick = {},
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+
+            DeviceConfiguration.MOBILE_LANDSCAPE -> {
+                Row(
+                    modifier = rootModifier.windowInsetsPadding(WindowInsets.displayCutout)
+                        .padding(horizontal = 32.dp),
+                    horizontalArrangement = Arrangement.spacedBy(32.dp)
+                ) {
+                    LoginHeaderSection(
+                        modifier = Modifier.weight(1f)
+                    )
+                    LoginFormSection(
+                        emailText = emailText,
+                        onEmailTextChange = { emailText = it },
+                        passwordText = passwordText,
+                        onPasswordTextChange = { passwordText = it },
+                        onLoginClick = {},
+                        onLinkClick = {},
+                        modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())
+                    )
+                }
+            }
+
+            DeviceConfiguration.TABLET_PORTRAIT,
+            DeviceConfiguration.TABLET_LANDSCAPE,
+            DeviceConfiguration.DESKTOP -> {
+            }
         }
+
     }
 }
 
@@ -183,3 +227,4 @@ fun PreviewLoginFormSectionLDark() {
         }
     }
 }
+
