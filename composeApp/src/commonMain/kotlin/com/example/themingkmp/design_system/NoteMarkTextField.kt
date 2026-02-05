@@ -55,7 +55,9 @@ fun NoteMarkTextField(
             modifier = Modifier.fillMaxWidth(),
             value = text,
             onValueChange = onValueChanged,
-            visualTransformation = if (isPasswordVisile.not()) PasswordVisualTransformation(mask = SECRET_MASK) else VisualTransformation.None,
+            visualTransformation = if (!isPasswordVisile && isSecret) PasswordVisualTransformation(
+                mask = SECRET_MASK
+            ) else VisualTransformation.None,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = MaterialTheme.colorScheme.surface,
